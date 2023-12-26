@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tic Tac Toe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #37505C;
+            color: rgb(226, 163, 46);
+           
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 4px;
+            color: var(--orange);
+            --orange: #F2C14E;
+            --winning-blocks: #2d414b;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            border: 2px solid whitesmoke;
+            font-size: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--orange);
+        }
+
+        .cell:hover {
+            background-color: #f0f0f0;
+        }
+
+        .status {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+        .reset-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+    
+            /* Media query for responsiveness */
+            @media (max-width: 600px) {
+                .board {
+                    grid-template-columns: repeat(3, 80px);
+                    font-size: 36px;
+                    max-width: 240px;
+                }
+    
+                .cell {
+                    width: 80px;
+                    height: 80px;
+                }
+    
+                .status {
+                    font-size: 20px;
+                }
+            }
+    
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Tic Tac Toe</h1>
+        <div class="board" id="board">
+            <div class="cell" onclick="makeMove(0)"></div>
+            <div class="cell" onclick="makeMove(1)"></div>
+            <div class="cell" onclick="makeMove(2)"></div>
+            <div class="cell" onclick="makeMove(3)"></div>
+            <div class="cell" onclick="makeMove(4)"></div>
+            <div class="cell" onclick="makeMove(5)"></div>
+            <div class="cell" onclick="makeMove(6)"></div>
+            <div class="cell" onclick="makeMove(7)"></div>
+            <div class="cell" onclick="makeMove(8)"></div>
+        </div>
+        <div class="status" id="status"></div>
+        <button class="reset-btn" onclick="resetBoard()">Reset</button>
+    </div>
+
+    <script>
+        let board = ['', '', '', '', '', '', '', '', ''];
+        let currentPlayer = 'X';
+        const winningCombos = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6],
+        ];
+
+        function checkWinner() {
+            for (let combo of winningCombos) {
+                const [a, b, c] = combo;
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    return board[a];
+                }
+            }
+            return null;
+        }
+
+        function checkDraw() {
+            return board.every(cell => cell !== '');
+        }
+
+        function makeMove(cellIndex) {
+            if (!board[cellIndex]) {
+                board[cellIndex] = currentPlayer;
+                document.getElementsByClassName('cell')[cellIndex].textContent = currentPlayer;
+                const winner = checkWinner();
+                if (winner) {
+                    document.getElementById('status').textContent = `Player ${winner} wins!`;
+                    disableCells();
+                } else if (checkDraw()) {
+                    document.getElementById('status').textContent = "It's a draw!";
+                } else {
+                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                }
+            }
+        }
+
+        function disableCells() {
+            const cells = document.getElementsByClassName('cell');
+            for (let cell of cells) {
+                cell.style.pointerEvents = 'none';
+            }
+        }
+
+        function resetBoard() {
+            board = ['', '', '', '', '', '', '', '', ''];
+            currentPlayer = 'X';
+            const cells = document.getElementsByClassName('cell');
+            for (let i = 0; i < cells.length; i++) {
+                cells[i].textContent = '';
+                cells[i].style.pointerEvents = 'auto';
+            }
+            document.getElementById('status').textContent = '';
+        }
+    </script>
+</body>
+</html>
+
+</body>
+</html>
